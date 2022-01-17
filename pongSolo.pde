@@ -1,6 +1,7 @@
-Player player = new Player(50, 500, 40, 10, color(255,255,255));
+Player player = new Player(50, 550, 60, 5, color(255,255,255));
 Ball ball = new Ball(400, 500, 10, 10, 1, 1, color(255,255,255));
 int score = 0;
+int bounce= 0;
 boolean game = true;
 
 void setup() {
@@ -48,7 +49,7 @@ class Player {
 }
 
 class Ball {
-  int x, y, w, h, vX, vY;
+  float x, y, w, h, vX, vY;
   color Color;
   
   Ball(int BallPosX, int BallPosY, int BallWidth, int BallHeight, int BallVelocityX, int BallVelocityY, color COLOR){
@@ -68,29 +69,32 @@ class Ball {
   }
   
   void updatePos() {
-    x = constrain(x - vX, w/2, 800 - w/2);
-    y = constrain(y - vY, h/2, 600 - h/2);
-    
+    x = constrain(x - (vX), w/2, 800 - w/2);
+    y = constrain(y - (vY), h/2, 600 - h/2);
   }
   
   void collisionHandler() {
     if (x == w/2 || x == 800 - w/2) {
       vX = -vX;
+      bounce++;
     }
     if (y == h/2 || y == 600 - h/2) {
       if (y == h/2) {score++;}
       if (y == 600 - h/2) {game = false;}
-      vY = -vY; 
+      vY = -vY;
+      bounce++;
     }
     //check the position the ball on the y of the player and the x axis
-    if ( ball.y == player.y && ball.x > player.x && ball.x < (player.x + player.w)) {
+    if ( y == player.y && x > player.x && x < (player.x + player.w)) {
        vY = -vY; 
+       bounce++;
     }
   }
-}
+  }
 
 void restart() {
   score = 0;
+  bounce=0;
   ball.x = 400;
   ball.y = 500;
   ball.w = 10;
